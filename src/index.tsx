@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { createStore, combineReducers } from 'redux';
 
 
 class LigaTitle extends React.Component {
@@ -10,48 +11,47 @@ class LigaTitle extends React.Component {
     const title = 'Bundesliga';
 
     return (
-        <div>{title}</div>     
+      <div>{title}</div>
     );
   }
 }
 
-class LigaDay extends React.Component {
+interface LigaDayProps {
+  day: number,
+  onDayChange: (day: number) => void;
+}
 
-  SquareX(iNumber:any) {
+class LigaDay extends React.Component<LigaDayProps> {
+
+  SquareX(iNumber: any) {
     return (
-      <button key={iNumber} className="square" onClick={() => this.HandleClick(iNumber)}>
-        {iNumber}      
+      <button 
+        style={{ backgroundColor: iNumber === this.props.day ? "red" : "white" }} 
+        key={iNumber} className="square" onClick={() => this.props.onDayChange(iNumber)}>
+        {iNumber}
       </button>
     );
   }
 
-  HandleClick(iDay:any)
-  {
-    console.log(iDay);
-    
-  }
-
   render() {
     const title = 'Day';
-    const iAmount:number = 34; // TODO to be provided from outside ...
+    const iAmount: number = 34; // TODO to be provided from outside ...
 
     var days = [];
-    for (var i = 1; i < iAmount+1; i++) {
+    for (var i = 1; i < iAmount + 1; i++) {
       days.push(this.SquareX(i));
     }
 
     return (
       <div>
-        <div>{title}</div>     
+        <div>{title}</div>
         <div className="board-row">
           {days}
 
-        
-         {/*[0, 1, 2].map( 
+          {/*[0, 1, 2].map( 
            day => <div>{i}</div> )
          */}
-        
-        
+
         </div>
       </div>
     );
@@ -63,13 +63,19 @@ class LigaResults extends React.Component {
     const title = 'Results';
 
     return (
-        <div>{title}</div>     
+      <div>{title}</div>
     );
   }
 }
 
+interface BundesligaProps {
+  day: number
+  onDayChange: (day: number) => void;
+}
 
-class Bundesliga extends React.Component {
+class Bundesliga extends React.Component<BundesligaProps> {
+  
+  
   render() {
     return (
       <div className="bundesliga">
@@ -77,7 +83,7 @@ class Bundesliga extends React.Component {
           <LigaTitle />
         </div>
         <div className="bundesliga-day-select">
-          <LigaDay />
+          <LigaDay day={this.props.day} onDayChange={day => this.props.onDayChange(day)} />
         </div>
         <div className="bundesliga-day-results">
           <LigaResults />
@@ -87,15 +93,63 @@ class Bundesliga extends React.Component {
   }
 }
 
-class BundesligaContainer extends React.Component {
+
+interface State {
+  day: number
+}
+// functions
+//  LoadData
+//  ShowResults
+//
+// state/event 
+//  OnDayChange
+//  OnDataLoading
+//  OnDataLoaded
+//  OnCancelDataLoading
+
+
+class BundesligaContainer extends React.Component<{}, State> {
+
+  
+  state: State = {
+    day: 1
+  }
+
   render() {
     return (
-      <Bundesliga />
+      <Bundesliga day={this.state.day} onDayChange={day => this.setDay(day)} />
     );
+  }
+
+  setDay(day: number) {
+    this.setState({ day: day});
   }
 }
 
+const SET_CURRENT_DAY = 'SET_CURRENT_DAY';
 
+function SetCurrentDay(day: number) {
+
+  alert(day);
+
+  return {
+    type: SET_CURRENT_DAY,
+    day,
+  };
+}
+
+
+function ShowResults(state = [], action: any) {
+  switch (action.type) {
+    default:
+      return state
+  }
+}
+
+// loads data/results for the selected day
+function LoadData(iDay: number) {
+
+}
 
 
 // ========================================
