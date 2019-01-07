@@ -4,58 +4,75 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-class Square extends React.Component {
+
+class LigaTitle extends React.Component {
   render() {
+    const title = 'Bundesliga';
+
     return (
-      <button className="square">
-        {/* TODO */}
-      </button>
+        <div>{title}</div>     
     );
   }
 }
 
+class LigaDay extends React.Component {
 
-class Board extends React.Component {
-  renderSquare(i:any) {
-    return <Square />;
+  SquareX(iNumber:any) {
+    return (
+      <button key={iNumber} className="square" onClick={() => this.HandleClick(iNumber)}>
+        {iNumber}      
+      </button>
+    );
+  }
+
+  HandleClick(iDay:any)
+  {
+    console.log(iDay);
   }
 
   render() {
-    const status = 'Next player: X';
+    const title = 'Day';
+    const iAmount:number = 34;
+
+    var days = [];
+    for (var i = 1; i < iAmount+1; i++) {
+      days.push(this.SquareX(i));
+    }
 
     return (
       <div>
-        <div className="status">{status}</div>
+        <div>{title}</div>     
         <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+        {days}
         </div>
       </div>
     );
   }
 }
 
-class Game extends React.Component {
+class LigaResults extends React.Component {
+  render() {
+    const title = 'Results';
+
+    return (
+        <div>{title}</div>     
+    );
+  }
+}
+
+
+class Bundesliga extends React.Component {
   render() {
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
+      <div className="bundesliga">
+        <div className="bundesliga-header">
+          <LigaTitle />
         </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
+        <div className="bundesliga-day-select">
+          <LigaDay />
+        </div>
+        <div className="bundesliga-day-results">
+          <LigaResults />
         </div>
       </div>
     );
@@ -65,7 +82,7 @@ class Game extends React.Component {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <Bundesliga />,
   document.getElementById('root')
 );
 
