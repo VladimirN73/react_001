@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 
 interface LigaDayProps {
   day: number,
@@ -32,11 +32,6 @@ export class LigaDay extends React.Component<LigaDayProps> {
         <div>{title}</div>
         <div className="board-row">
           {days}
-
-          {/*[0, 1, 2].map( 
-           day => <div>{i}</div> )
-         */}
-
         </div>
       </div>
     );

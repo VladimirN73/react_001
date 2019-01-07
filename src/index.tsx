@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore, combineReducers } from 'redux';
 import {LigaDay} from './LigaDay'
+import {LigaResults} from './LigaResults'
 
 
 class LigaTitle extends React.Component {
@@ -17,22 +18,6 @@ class LigaTitle extends React.Component {
   }
 }
 
-interface LigaDayProps {
-  day: number,
-  onDayChange: (day: number) => void;
-}
-
-
-
-class LigaResults extends React.Component {
-  render() {
-    const title = 'Results';
-
-    return (
-      <div>{title}</div>
-    );
-  }
-}
 
 interface BundesligaProps {
   day: number
@@ -51,7 +36,7 @@ class Bundesliga extends React.Component<BundesligaProps> {
           <LigaDay day={this.props.day} onDayChange={day => this.props.onDayChange(day)} />
         </div>
         <div className="bundesliga-day-results">
-          <LigaResults />
+          <LigaResults day={this.props.day} />
         </div>
       </div>
     );
@@ -60,8 +45,10 @@ class Bundesliga extends React.Component<BundesligaProps> {
 
 
 interface State {
-  day: number
+  day: number,
+  loading: boolean  
 }
+
 // functions
 //  LoadData
 //  ShowResults
@@ -72,49 +59,37 @@ interface State {
 //  OnDataLoaded
 //  OnCancelDataLoading
 
-
 class BundesligaContainer extends React.Component<{}, State> {
-
-  
   state: State = {
-    day: 1
+    day: 0,
+    loading: false
   }
 
   render() {
     return (
-      <Bundesliga day={this.state.day} onDayChange={day => this.setDay(day)} />
+      <Bundesliga 
+        day={this.state.day} 
+        onDayChange={day => this.setDay(day)} />
     );
   }
 
   setDay(day: number) {
     this.setState({ day: day});
+    alert(day);
+
+    this.loadData(day);
   }
-}
 
-const SET_CURRENT_DAY = 'SET_CURRENT_DAY';
+  // loads data/results for the selected day
+  loadData(day: number) {
+    this.setState({ loading:true})
 
-function SetCurrentDay(day: number) {
-
-  alert(day);
-
-  return {
-    type: SET_CURRENT_DAY,
-    day,
-  };
-}
-
-
-function ShowResults(state = [], action: any) {
-  switch (action.type) {
-    default:
-      return state
+    this.setState({ loading:false})
   }
-}
-
-// loads data/results for the selected day
-function LoadData(iDay: number) {
 
 }
+
+
 
 
 // ========================================
