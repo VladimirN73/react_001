@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { createStore, combineReducers } from 'redux';
 import {LigaDay} from './LigaDay'
 import {LigaResults} from './LigaResults'
-
 
 class LigaTitle extends React.Component {
   render() {
@@ -22,6 +19,7 @@ class LigaTitle extends React.Component {
 interface BundesligaProps {
   day: number
   onDayChange: (day: number) => void;
+  data:any
 }
 
 class Bundesliga extends React.Component<BundesligaProps> {
@@ -36,7 +34,7 @@ class Bundesliga extends React.Component<BundesligaProps> {
           <LigaDay day={this.props.day} onDayChange={day => this.props.onDayChange(day)} />
         </div>
         <div className="bundesliga-day-results">
-          <LigaResults day={this.props.day} />
+          <LigaResults day={this.props.day} data={this.props.data} />
         </div>
       </div>
     );
@@ -46,7 +44,8 @@ class Bundesliga extends React.Component<BundesligaProps> {
 
 interface State {
   day: number,
-  loading: boolean  
+  loading: boolean,
+  data:any
 }
 
 // functions
@@ -62,21 +61,23 @@ interface State {
 class BundesligaContainer extends React.Component<{}, State> {
   state: State = {
     day: 0,
-    loading: false
+    loading: false,
+    data:null
   }
 
   render() {
     return (
       <Bundesliga 
         day={this.state.day} 
-        onDayChange={day => this.setDay(day)} />
+        onDayChange={day => this.setDay(day)}
+        data={this.state.data}
+      />
     );
   }
 
   setDay(day: number) {
     this.setState({ day: day});
-    alert(day);
-
+    // alert(day);
     this.loadData(day);
   }
 
@@ -84,13 +85,22 @@ class BundesligaContainer extends React.Component<{}, State> {
   loadData(day: number) {
     this.setState({ loading:true})
 
+    let url='https://www.openligadb.de/api/getmatchdata/bl1/2017/' + day;
+    
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {     
+      this.setState(
+        { data:data},
+        () => {console.log(this.state);}  // a hack to avoid async/late setting
+      );
+
+    });
+
     this.setState({ loading:false})
   }
 
 }
-
-
-
 
 // ========================================
 
