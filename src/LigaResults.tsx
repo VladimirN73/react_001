@@ -1,18 +1,18 @@
 import React from 'react';
 
 interface LigaResultsProps {
-    day: number,
-    data:any
-  }
+  day: number,
+  data: any
+}
 
-  export interface GameProps {
-    id:string;
-    day: string;
-    teamA:string;
-    teamB:string;
-    scoreA:string;
-    scoreB:string;
-  }
+export interface GameProps {
+  id: string;
+  day: string;
+  teamA: string;
+  teamB: string;
+  scoreA: string;
+  scoreB: string;
+}
 
 export class LigaResults extends React.Component<LigaResultsProps> {
 
@@ -27,26 +27,40 @@ export class LigaResults extends React.Component<LigaResultsProps> {
   render() {
     const title = 'Results';
 
-    let data = this.props.data;
+    const data = this.props.data;
 
-    if (data)
-    {
-      var games = data.map((game:any)=>{
-        return (this.Game({
-          id:game.MatchID, 
-          day:game.MatchDateTime,
-          teamA:game.Team1.TeamName,
-          teamB:game.Team2.TeamName,
-          scoreA:game.MatchResults[0].PointsTeam1,
-          scoreB:game.MatchResults[0].PointsTeam2,
-        }))});
-    }
     return (
-      <div>        
+      <div>
         <div>{title}</div>
-        {games}
+        
+          {data && data.map((g: any) => {
+            
+            const game = {
+              id: g.MatchID,
+              day: g.MatchDateTime,
+              teamA: g.Team1.TeamName,
+              teamB: g.Team2.TeamName,
+              scoreA: g.MatchResults[0].PointsTeam1,
+              scoreB: g.MatchResults[0].PointsTeam2,
+            };
+
+            return <GameItem key={g.MatchID} {...game}/>;
+          })
+        }
+        
       </div>
-      
+
     );
   }
 }
+
+const GameItem: React.StatelessComponent<{
+  id: string;
+  day: string;
+  teamA: string;
+  scoreA: string;
+  scoreB: string;
+  teamB: string;
+}> = (props) => <li key={props.id}>
+{props.day} {props.teamA} {props.scoreA} : {props.scoreB} {props.teamB}
+</li>;

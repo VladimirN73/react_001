@@ -4,6 +4,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {LigaDay} from './LigaDay'
 import {LigaResults} from './LigaResults'
+import {loadDataApi} from './LigaApi'
 
 class LigaTitle extends React.Component {
   render() {
@@ -79,10 +80,18 @@ class BundesligaContainer extends React.Component<{}, State> {
     this.setState({ day: day});
     // alert(day);
     this.loadData(day);
+
+  }
+
+  loadData(day: number) {
+    this.setState({ loading:true})
+    const data = loadDataApi(day);
+    
+    this.setState({ data:data});
   }
 
   // loads data/results for the selected day
-  loadData(day: number) {
+  loadDataX(day: number) {
     this.setState({ loading:true})
 
     let url='https://www.openligadb.de/api/getmatchdata/bl1/2017/' + day;
